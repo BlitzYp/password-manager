@@ -11,6 +11,9 @@ def setup_window(window: tk.Tk) -> None:
     window.iconphoto(False, photo)
 
 def find_data(website: str) -> dict:
+    if not len(website):
+        messagebox.showinfo(title="Missing website", message="Please enter a website")
+        return
     with open("text.csv", "r+") as file:
         reader = csv.DictReader(file, delimiter='|')
         # Yes, I know that we can use a more effiecient algorithm to search for the website but I think O(n) should suffice for now :)
