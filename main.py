@@ -24,6 +24,9 @@ def write_data(website: str, email: str, password: str) -> None:
             writer = csv.writer(file, delimiter='|')
             writer.writerow([website, email, password])
         messagebox.showinfo(title="Result", message="Data has been written to the file!")
+        window.clipboard_clear()
+        window.clipboard_append(password)
+        window.update(
         clear()
 
 def get_most_used_email() -> str:
