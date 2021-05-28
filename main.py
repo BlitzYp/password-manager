@@ -10,6 +10,22 @@ def setup_window(window: tk.Tk) -> None:
     photo = tk.PhotoImage(file="logo.png")
     window.iconphoto(False, photo)
 
+def find_data(website: str) -> dict:
+    with open("text.csv", "r+") as file:
+        reader = csv.DictReader(file, delimiter='|')
+        # Yes, I know that we can use a more effiecient algorithm to search for the website but I think O(n) should suffice for now :)
+        for i in reader:
+            if i.get("website") == website:
+                email = i.get("email")
+                password = i.get("password")
+                messagebox.showinfo(title="Data found", message=f"Website: {website}\nEmail: {email}\nPassword: {password}")
+                clear()
+                window.clipboard_clear()
+                window.clipboard_append(password)
+                window.update()
+                return i
+        messagebox.showinfo(title="Data not found", message=f"Could not find data for website: {website}")
+
 def clear() -> None:
     password.delete(0, tk.END) 
     website.delete(0, tk.END) 
@@ -26,7 +42,7 @@ def write_data(website: str, email: str, password: str) -> None:
         messagebox.showinfo(title="Result", message="Data has been written to the file!")
         window.clipboard_clear()
         window.clipboard_append(password)
-        window.update(
+        window.update()
         clear()
 
 def get_most_used_email() -> str:
@@ -72,7 +88,8 @@ if __name__ == "__main__":
 
     # Buttons
     gen_pass_btn = tk.Button(master=window, text="Generate Password", command = auto_pass)
-    add_btn = tk.Button(master=window, width=20, height=1, command=lambda: write_data(website.get(), email_username.get(), password.get()), text="Add")
+    add_btn = tk.Button(master=window, width=10, height=1, command=lambda: write_data(website.get(), email_username.get(), password.get()), text="Add")
+    search_btn = tk.Button(master=window, width=10, text="Search", command=lambda: find_data(website.get()))
 
     # Layout widgets
     canvas.place(x=40, y=30)
@@ -85,6 +102,7 @@ if __name__ == "__main__":
     # Layout buttons
     add_btn.grid(column=1, row=4, columnspan=2)
     gen_pass_btn.grid(column=3, row=3)
+    search_btn.grid(column=3, row=1)
 
     # Layout GUI
     website_gui.grid(column=0, row=1)
