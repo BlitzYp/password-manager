@@ -1,4 +1,3 @@
-import csv
 import tkinter as tk, tkinter.messagebox as messagebox
 from gen_pass import generate_pass
 import os
